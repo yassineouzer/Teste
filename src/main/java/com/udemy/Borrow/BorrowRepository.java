@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BorrowRepository  extends CrudRepository<Borrow, Integer> {
    List<Borrow> findbyBorrowerId(Integer borrowerid);
-   List<Book>   findbyBookId(Integer bookId);
+   List<Borrow>   findbyBookId(Integer bookId);
 }
