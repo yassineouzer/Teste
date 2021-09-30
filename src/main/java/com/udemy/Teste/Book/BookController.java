@@ -1,6 +1,7 @@
 package com.udemy.Teste.Book;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,14 +28,28 @@ public class BookController {
 
 
     @GetMapping(value="/books")
-    public ResponseEntity ListBooks(){
-          
-        BookRepository.FindByUserIdAndDeletedFalse(id);
+    public ResponseEntity ListBooks(@RequestParam  BookStatus status){
 
-         return new ResponseEntity<>(Arrays.asList(book), HttpStatus.OK);
-       
+        List<Book> Books;
+      Integer UserConnectedId = this.getConnectedId();
+
+
+
+   if(status!=null && status==BookStatus.free){ 
+    Books =BookRepository.FindBystatusAndUserIdNotAndDeletedFalse(status, UserConnectedId);
     }
 
+     
+      Books = BookRepository.FindByUserIdAndDeletedFalse(UserConnectedId);
+    
+
+      return new ResponseEntity<>( Books, HttpStatus.OK);
+         
+       
+    }
+        
+    private Integer getConnectedId(){  
+        return 1;  }
     @PostMapping(value="/books")
     public ResponseEntity addBook(@Valid @RequestBody Book book){
       
