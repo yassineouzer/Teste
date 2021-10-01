@@ -2,10 +2,12 @@ package com.udemy.Teste.Book;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import com.udemy.Teste.Book.Category.Category;
+import com.udemy.Teste.Book.User.User;
 import com.udemy.Teste.Book.User.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,40 +21,42 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BookController {
-    
- @Autowired
- private BookRepository  BookRepository;
 
-@Autowired 
- private UserRepository  UserRepository;
+    @Autowired
+    private BookRepository BookRepository;
 
+    @Autowired
+    private UserRepository UserRepository;
 
-    @GetMapping(value="/books")
-    public ResponseEntity ListBooks(@RequestParam  BookStatus status){
+    @GetMapping(value = "/books")
+    public ResponseEntity ListBooks(@RequestParam BookStatus status) {
 
         List<Book> Books;
-      Integer UserConnectedId = this.getConnectedId();
+        Integer UserConnectedId = this.getConnectedId();
 
+        if (status != null && status == BookStatus.free) {
 
+            Books = BookRepository.FindBystatusAndUserIdNotAndDeletedFalse(status, UserConnectedId);
 
-   if(status!=null && status==BookStatus.free){ 
-    Books =BookRepository.FindBystatusAndUserIdNotAndDeletedFalse(status, UserConnectedId);
+        }
+
+        Books = BookRepository.FindByUserIdAndDeletedFalse(UserConnectedId);
+
+        return new ResponseEntity<>(Books, HttpStatus.OK);
+
     }
 
-     
-      Books = BookRepository.FindByUserIdAndDeletedFalse(UserConnectedId);
-    
+    private Integer getConnectedId() {
+        return 1;
+    }
 
-      return new ResponseEntity<>( Books, HttpStatus.OK);
+    @PostMapping(value = "/books")
+    public ResponseEntity addBook(@Valid @RequestBody Book book) {
+
+        Integer UserConnectedId = this.getConnectedId();
+        Optional<User> user = UserRepository.findById(UserConnectedId);
          
-       
-    }
-        
-    private Integer getConnectedId(){  
-        return 1;  }
-    @PostMapping(value="/books")
-    public ResponseEntity addBook(@Valid @RequestBody Book book){
-      
+          
 
          return new ResponseEntity<>(book, HttpStatus.CREATED);
        
