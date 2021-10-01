@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.*;
+
+@Data
 @Entity
 public class Category {
 
@@ -23,36 +26,8 @@ public class Category {
 
     public Category(String label) {
         this.label = label;
-	}
+	}}
 
+    
 
-	/**
-     * @return String return the label
-     */
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     * @param label the label to set
-     */
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-
-    /**
-     * @return int return the Id
-     */
-    public int getId() {
-        return Id;
-    }
-
-    /**
-     * @param Id the Id to set
-     */
-    public void setId(int Id) {
-        this.Id = Id;
-    }
-
-}
+  

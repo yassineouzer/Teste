@@ -31,34 +31,26 @@ public class BookController {
     @GetMapping(value = "/books")
     public ResponseEntity ListBooks(@RequestParam BookStatus status) {
 
-        List<Book> Books;
-        Integer UserConnectedId = this.getConnectedId();
+//free books
 
-        if (status != null && status == BookStatus.free) {
+    
+        BookRepository.FindBystatusAndUserIdNotAndDeletedFalse(status, getConnectedId());
 
-            Books = BookRepository.FindBystatusAndUserIdNotAndDeletedFalse(status, UserConnectedId);
+    List<Book>books= BookRepository.FindByUserIdAndDeletedFalse(getConnectedId());
 
-        }
-
-        Books = BookRepository.FindByUserIdAndDeletedFalse(UserConnectedId);
-
-        return new ResponseEntity<>(Books, HttpStatus.OK);
+        return new ResponseEntity<>(books, HttpStatus.OK);
 
     }
 
     private Integer getConnectedId() {
         return 1;
+
     }
 
     @PostMapping(value = "/books")
     public ResponseEntity addBook(@Valid @RequestBody Book book) {
 
-        Integer UserConnectedId = this.getConnectedId();
-        Optional<User> user = UserRepository.findById(UserConnectedId);
-         
-          
-
-         return new ResponseEntity<>(book, HttpStatus.CREATED);
+       
        
     }
 }
