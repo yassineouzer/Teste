@@ -27,16 +27,17 @@ public class BookController {
 
     @Autowired
     private UserRepository UserRepository;
-
+    List<Book> books;
     @GetMapping(value = "/books")
     public ResponseEntity ListBooks(@RequestParam BookStatus status) {
 
 //free books
-
+if(status==BookStatus.free && status!=null){
     
-        BookRepository.FindBystatusAndUserIdNotAndDeletedFalse(status, getConnectedId());
+    List<Book>books =BookRepository.FindBystatusAndUserIdNotAndDeletedFalse(status, getConnectedId());
+} else  { 
 
-    List<Book>books= BookRepository.FindByUserIdAndDeletedFalse(getConnectedId());
+  books= BookRepository.FindByUserIdAndDeletedFalse(getConnectedId());}
 
         return new ResponseEntity<>(books, HttpStatus.OK);
 
