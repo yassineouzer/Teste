@@ -130,4 +130,14 @@ public ResponseEntity update(@PathVariable("bookid") String bookid,@RequestBody 
     return new ResponseEntity<>(booktosave ,HttpStatus.OK);
 
 
-}}
+}
+          @GetMapping(value = "/borrows")
+        public ResponseEntity listBorrows() {
+          Integer userconnected = BookController.getConnectedId();
+          List<Borrow> borrows=BorrowRepository.findbyBorrowerId(userconnected);
+            return new ResponseEntity<>(borrows,HttpStatus.OK);
+}
+
+
+
+}
