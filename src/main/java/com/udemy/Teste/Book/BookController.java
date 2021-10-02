@@ -93,7 +93,7 @@ else {
 public ResponseEntity delete(@PathVariable("bookid") String bookid) {
     
            Optional<Book>bookTodelete =BookRepository.findById(Integer.valueOf(bookid));
-           if( !bookTodelete.isPresent()){
+           if(!bookTodelete.isPresent()){
             return new ResponseEntity("you must provide an existing book",HttpStatus.BAD_REQUEST);
            }
           Book book = bookTodelete.get();
@@ -108,7 +108,7 @@ public ResponseEntity delete(@PathVariable("bookid") String bookid) {
          }    book.setDeleted(true);
               BookRepository.save(book);
         }
-    return null;
+return null;
     
 }
 
