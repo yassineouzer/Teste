@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.udemy.Borrow.Borrow;
+import com.udemy.Borrow.BorrowRepository;
 import com.udemy.Teste.Book.Category.Category;
 import com.udemy.Teste.Book.Category.CategoryRepository;
 import com.udemy.Teste.Book.User.User;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,8 +32,14 @@ public class BookController {
     @Autowired
     private BookRepository BookRepository;
 
+   @Autowired 
+    private BorrowRepository BorrowRepository; 
+
+
     @Autowired
     private UserRepository UserRepository;
+
+
     List<Book> books;
 
     Integer userconnected=this.getConnectedId();
@@ -79,4 +88,33 @@ else {
     BookRepository.save(book);
      return new ResponseEntity<>(book,HttpStatus.CREATED);
 
-}}
+}
+
+public ResponseEntity delete(@PathVariable("bookid") String bookid) {
+    
+           Optional<Book>bookTodelete =BookRepository.findById(Integer.valueOf(bookid));
+           if( !bookTodelete.isPresent()){
+            return new ResponseEntity("you must provide an existing book",HttpStatus.BAD_REQUEST);
+           }
+          Book book = bookTodelete.get();
+          
+         List<Borrow>borrows= BorrowRepository.findbyBookId(book.getId());
+
+         for(Borrow borrow:borrows){
+             if(borrow.getClosedate()== null){
+                 User borrower = borrow.getBorrower();
+                 return new ResponseEntity<>(borrower,HttpStatus.CONFLICT);
+
+         }    book.setDeleted(true);
+              BookRepository.save(book);
+        }
+    return null;
+    
+}
+
+
+
+
+
+
+}
