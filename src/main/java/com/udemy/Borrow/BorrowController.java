@@ -4,16 +4,20 @@ import com.udemy.Teste.Book.Category.CategoryRepository;
 import com.udemy.Teste.Book.User.User;
 import com.udemy.Teste.Book.User.UserRepository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import com.udemy.Teste.Book.Book;
 import com.udemy.Teste.Book.BookController;
 import com.udemy.Teste.Book.BookRepository;
+import com.udemy.Teste.Book.BookStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 public class BorrowController {
     
@@ -47,8 +51,18 @@ if(borroe.isPresent()&& borrower.isPresent()){
     Borrow borrow = new Borrow();
     borrow.setBook(borroe.get());
     borrow.setBorrower(borrower.get());
+    borrow.setLender(borroe.get().getUser());
+    borrow.setAskdate(LocalDate.now());
+
+    BorrowRepository.save(borrow);
+    borroe.get().setBookStatus(BookStatus.borrowed);
+    BookRepository.save(borroe.get());
+
+    return new ResponseEntity<>(borroe, HttpStatus.CREATED);
 }
 
+
+    return new ResponseEntity<>(borroe,HttpStatus.BAD_REQUEST);
 
     
 }}
