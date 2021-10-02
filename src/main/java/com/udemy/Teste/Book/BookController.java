@@ -58,8 +58,25 @@ if(status==BookStatus.free && status!=null){
     @PostMapping(value = "/books")
     public ResponseEntity addBook(@Valid @RequestBody Book book) {
 
-  books= BookRepository.FindByUserIdAndDeletedFalse(userconnected);}
-      Optional<User>User= UserRepository.findById(userconnected);
-       
-    }
+  books= BookRepository.FindByUserIdAndDeletedFalse(userconnected);
+      Optional<User>user= UserRepository.findById(userconnected);
+      Optional<Category> category = CategoryRepository.findById(book.getCategoryid());
+      
+if(category.isPresent()){
+  book.setCategory(category.get());
 }
+else {
+    return new ResponseEntity<>("you must provide a valid category" , HttpStatus.BAD_REQUEST);
+}
+  if(user.isPresent()){
+
+book.setUser(user.get());
+}
+else {
+    return new ResponseEntity<>("the user does'nt exixte" ,HttpStatus.BAD_REQUEST);}
+    book.setDeleted(false);
+    book.setBookStatus(BookStatus.free);
+    BookRepository.save(book);
+     return new ResponseEntity<>(book,HttpStatus.CREATED);
+
+}}

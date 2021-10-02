@@ -1,7 +1,5 @@
 package com.udemy.Teste.Book;
 
-import java.util.Locale.Category;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 
+import com.udemy.Teste.Book.Category.Category;
 import com.udemy.Teste.Book.User.User;
 
 import lombok.*;

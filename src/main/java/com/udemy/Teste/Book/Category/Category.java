@@ -18,15 +18,7 @@ public class Category {
     private int Id;
     private String label;
 
-
-    public Category() {
-        
-	}
-
-
-    public Category(String label) {
-        this.label = label;
-	}}
+}
 
     
 
