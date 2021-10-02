@@ -61,7 +61,7 @@ if(status==BookStatus.free && status!=null){
 
     }
 
-    private Integer getConnectedId() {
+    public static  int getConnectedId() {
         return 1;
 
     }
