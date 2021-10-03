@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 public class BorrowController {
     
@@ -66,4 +67,26 @@ if(borroe.isPresent()&& borrower.isPresent()){
     return new ResponseEntity<>(borroe,HttpStatus.BAD_REQUEST);
 
     
-}}
+}
+
+      
+@DeleteMapping(value="/borrows/{birrowd}")
+public ResponseEntity deleteborrow(@PathVariable("borrowid") String borrowid) {
+Optional<Borrow>borrow1=BorrowRepository.findById(Integer.valueOf(borrowid));
+ Borrow borow = borrow1.get();
+ borow.setClosedate(LocalDate.now());
+ BorrowRepository.save(borow);
+  Book book2= borow.getBook();
+book2.setBookStatus(BookStatus.free);
+BookRepository.save(book2);
+    return null;
+ 
+
+}
+
+
+
+
+
+
+}
