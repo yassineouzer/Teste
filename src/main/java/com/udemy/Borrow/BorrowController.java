@@ -45,29 +45,23 @@ public class BorrowController {
 
 @PostMapping(value = "/borrows")
 public ResponseEntity addBorrow(@PathVariable("bookid") String bookid) {
-Optional<Book>borroe= BookRepository.findById(Integer.valueOf(bookid));
-Integer userconnected= BookController.getConnectedId();
-Optional<User> borrower = UserRepository.findById(Integer.valueOf(userconnected));
-
-if(borroe.isPresent()&& borrower.isPresent()){
-    Borrow borrow = new Borrow();
-    borrow.setBook(borroe.get());
-    borrow.setBorrower(borrower.get());
-    borrow.setLender(borroe.get().getUser());
-    borrow.setAskdate(LocalDate.now());
-
-    BorrowRepository.save(borrow);
-    borroe.get().setBookStatus(BookStatus.borrowed);
-    BookRepository.save(borroe.get());
-
-    return new ResponseEntity<>(borroe, HttpStatus.CREATED);
+  Integer userconnected= BookController.getConnectedId();
+Optional<Book> boroe =BookRepository.findById(Integer.valueOf(bookid));
+Optional<User>userconnected1 =UserRepository.findById(userconnected);
+if(!boroe.isPresent() && !userconnected1.isPresent()){
+    return new ResponseEntity<>("book is unexisting",HttpStatus.BAD_REQUEST);
+}
+Borrow borow = new Borrow();
+borow.setBook(boroe.get());
+borow.setBorrower(userconnected1.get());
+borow.setAskdate(LocalDate.now());
+borow.setLender(boroe.get().getUser());
+BorrowRepository.save(borow);
+boroe.get().setBookStatus(BookStatus.borrowed);
+BookRepository.save(boroe.get());
+    return new ResponseEntity<>(HttpStatus.CREATED);
 }
 
-
-    return new ResponseEntity<>(borroe,HttpStatus.BAD_REQUEST);
-
-    
-}
 
       
 @DeleteMapping(value="/borrows/{birrowd}")
@@ -76,9 +70,9 @@ Optional<Borrow>borrow1=BorrowRepository.findById(Integer.valueOf(borrowid));
  Borrow borow = borrow1.get();
  borow.setClosedate(LocalDate.now());
  BorrowRepository.save(borow);
-  Book book2= borow.getBook();
-book2.setBookStatus(BookStatus.free);
-BookRepository.save(book2);
+  Book book= borow.getBook();
+  book.setBookStatus(BookStatus.free);
+BookRepository.save(book);
     return null;
  
 
