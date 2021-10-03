@@ -49,6 +49,7 @@ public ResponseEntity addBorrow(@PathVariable("bookid") String bookid) {
 Optional<Book> boroe =BookRepository.findById(Integer.valueOf(bookid));
 Optional<User>userconnected1 =UserRepository.findById(userconnected);
 if(!boroe.isPresent() && !userconnected1.isPresent()){
+    
     return new ResponseEntity<>("book is unexisting",HttpStatus.BAD_REQUEST);
 }
 Borrow borow = new Borrow();
