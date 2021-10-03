@@ -42,6 +42,8 @@ public class BookController {
     private UserRepository UserRepository;
 
 
+
+
     List<Book> books;
 
     Integer userconnected=this.getConnectedId();
@@ -133,6 +135,11 @@ public ResponseEntity update(@PathVariable("bookid") String bookid,@RequestBody 
 }
       
 
+@GetMapping(value = "/categories")
+public ResponseEntity listCategories() {
+ List<Category>categories= (List<Category>) CategoryRepository.findAll();
+    return new ResponseEntity<>(categories,HttpStatus.OK);
+}
     
     
     
